@@ -1,0 +1,143 @@
+# lamfat — a faithful republish of fatfs (rafalh/rust-fatfs) under a distinct
+# name, for the LamBoot bootloader family and Debian/Fedora packaging (debcargo).
+#
+# Forked from fatfs @ c4b88477b22ca7e5131fbd8891f62a5deaa88e6e (the no_std 0.4.0
+# git line — the only version with the no_std IoBase/Read/Write/Seek surface;
+# crates.io 0.3.6 is std/core_io-based). Upstream is MIT (Copyright 2017 Rafał
+# Harabień); lamfat keeps MIT. See PROVENANCE.md and NOTICE.
+#
+# Sole behavioural change vs upstream: `chrono` is dropped from the default
+# feature set (kept opt-in) so the default dependency tree is just bitflags + log.
+
+[package]
+name = "lamfat"
+version = "0.4.0"
+authors = [
+    "Rafał Harabień <rafalh92@outlook.com>",
+    "Greg Lamberson <greg@lamco.io>",
+    "Lamco Development LLC <office@lamco.io>",
+]
+edition = "2021"
+rust-version = "1.68"
+repository = "https://github.com/lamco-admin/lamfat"
+homepage = "https://lamco.ai/products/lamboot/"
+readme = "README.md"
+keywords = ["fat", "filesystem", "no_std", "uefi", "bootloader"]
+categories = ["filesystem", "no-std"]
+license = "MIT"
+description = "no_std read/write FAT12/16/32 filesystem library (republish of fatfs)"
+documentation = "https://docs.rs/lamfat"
+# Allowlist (not a denylist): only these ship in the crate. Test fixtures
+# (resources/, tests/) and dev scripts stay in git but never publish.
+include = [
+    "src/**/*.rs",
+    "examples/**/*.rs",
+    "README.md",
+    "PROVENANCE.md",
+    "NOTICE",
+    "CHANGELOG.md",
+    "LICENSE-MIT",
+]
+
+[features]
+# Identical to upstream EXCEPT chrono is removed from `default` (still available
+# as an opt-in feature). This is the only behavioural change from fatfs.
+std = []
+lfn = []
+alloc = []
+unicode = []
+log_level_error = []
+log_level_warn = ["log_level_error"]
+log_level_info = ["log_level_warn"]
+log_level_debug = ["log_level_info"]
+log_level_trace = ["log_level_debug"]
+default = ["std", "alloc", "lfn", "unicode", "log_level_trace"]
+
+[dependencies]
+bitflags = { version = "2", default-features = false }
+log = { version = "0.4", default-features = false }
+chrono = { version = "0.4", default-features = false, features = ["clock"], optional = true }
+
+[dev-dependencies]
+# 0.10 drops the unmaintained `atty` (RUSTSEC) yet still resolves on the 1.68 MSRV.
+env_logger = "0.10"
+fscommon = "0.1"
+tempfile = "3.24.0"
+
+# The `ls` example prints timestamps, so it needs the (non-default) chrono feature.
+[[example]]
+name = "ls"
+required-features = ["chrono"]
+
+[package.metadata.docs.rs]
+all-features = true
+targets = ["x86_64-unknown-linux-gnu"]
+rustdoc-args = ["--cfg", "docsrs"]
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+# Lints: the Lamco crate standard (clippy::pedantic at deny), with the allow-list
+# tuned for a faithful republish of a binary-format FAT engine. Vendored upstream
+# code is not rewritten to the house pedantic style, so the patterns it uses are
+# allowed crate-wide rather than edited (PROVENANCE: no source-logic changes).
+[lints.rust]
+unsafe_op_in_unsafe_fn = "warn"
+# carried as-is from upstream (faithful republish — not rewritten to current style)
+mismatched_lifetime_syntaxes = "allow"
+
+[lints.clippy]
+pedantic = { priority = -1, level = "deny" }
+
+# Documentation pedantic lints (upstream predates them)
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+doc_markdown = "allow"
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+return_self_not_must_use = "allow"
+
+# Numeric casts are pervasive and deliberate in an on-disk FAT codec
+cast_lossless = "allow"
+cast_possible_truncation = "allow"
+cast_possible_wrap = "allow"
+cast_sign_loss = "allow"
+cast_precision_loss = "allow"
+ptr_as_ptr = "allow"
+
+# Style lints upstream's code (and its tests) trigger
+similar_names = "allow"
+unreadable_literal = "allow"
+items_after_statements = "allow"
+redundant_else = "allow"
+if_not_else = "allow"
+single_match_else = "allow"
+match_same_arms = "allow"
+manual_let_else = "allow"
+bool_to_int_with_if = "allow"
+match_wildcard_for_single_variants = "allow"
+explicit_iter_loop = "allow"
+used_underscore_binding = "allow"
+unused_self = "allow"
+too_many_lines = "allow"
+struct_excessive_bools = "allow"
+wildcard_imports = "allow"
+needless_pass_by_value = "allow"
+trivially_copy_pass_by_ref = "allow"
+
+# Tests and examples use unwrap/expect freely
+unwrap_used = "allow"
+expect_used = "allow"
+
+# Carried as-is from the upstream fatfs git line (faithful republish — cosmetic
+# style/complexity lints, not rewritten in vendored code)
+uninlined_format_args = "allow"
+unnecessary_semicolon = "allow"
+semicolon_if_nothing_returned = "allow"
+question_mark = "allow"
+redundant_closure = "allow"
+redundant_closure_for_method_calls = "allow"
+needless_borrows_for_generic_args = "allow"
+type_complexity = "allow"
+checked_conversions = "allow"
+should_panic_without_expect = "allow"

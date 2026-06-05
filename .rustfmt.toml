@@ -1,0 +1,14 @@
+# Integrated Development Framework — rustfmt template
+# Copy to project root as .rustfmt.toml
+#
+# IMPORTANT: imports_granularity and group_imports are nightly-only features.
+# You must use `rustup run nightly cargo fmt` instead of `cargo fmt`.
+# Stable rustfmt will print warnings about these settings but still format
+# everything else correctly.
+#
+# CUSTOMIZE: edition to match your Cargo.toml
+
+edition = "2021"
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+use_field_init_shorthand = true

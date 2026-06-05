@@ -1,0 +1,6 @@
+# Integrated Development Framework — clippy template
+# Copy to project root as clippy.toml
+
+cognitive-complexity-threshold = 25
+too-many-arguments-threshold = 7
+type-complexity-threshold = 250

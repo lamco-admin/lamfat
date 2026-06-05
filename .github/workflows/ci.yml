@@ -1,0 +1,98 @@
+# lamfat CI — Tier 1 (baseline gate) + Tier 2 (MSRV / no_std / supply-chain).
+# Per Lamco Crate Standards (projects/lamco-rust-crates/docs/STANDARDS.md §3.4, §14).
+# lamfat is a faithful republish of fatfs (no_std FAT12/16/32); the no-std job is
+# load-bearing — a stray std:: path must fail to compile.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  MSRV: "1.68"                       # matches Cargo.toml rust-version (fatfs's floor)
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ───────────────────────── Tier 1: baseline mechanical gate ─────────────────────────
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: clippy (default features)
+        run: cargo clippy --all-targets -- -D warnings
+      - name: clippy (all features)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      # fatfs's fsck integration tests shell out to fsck.vfat / mkfs.fat.
+      - name: install dosfstools
+        run: sudo apt-get update && sudo apt-get install -y dosfstools
+      - run: cargo test --all-features
+      - run: cargo build --examples --all-features
+
+  doc:
+    runs-on: ubuntu-latest
+    env:
+      RUSTDOCFLAGS: -D warnings
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo doc --no-deps --all-features
+
+  # ───────────────────────── Tier 2: crate-specific rigor ─────────────────────────
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.MSRV }}
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --all-features
+
+  no-std:
+    # Builds the library for a bare-metal target with no std, proving lamfat is
+    # genuinely no_std. `alloc` is required for the long-filename + format paths.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: thumbv7em-none-eabihf
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --lib --no-default-features --features alloc,lfn,unicode --target thumbv7em-none-eabihf
+
+  deny:
+    # Supply chain: advisories, license policy, banned/duplicate crates, git sources.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
+      - run: cargo deny check

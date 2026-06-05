@@ -1,0 +1,51 @@
+# Integrated Development Framework — cargo-deny template
+# Copy to project as .cargo/deny.toml
+#
+# CUSTOMIZE before first use:
+# 1. [licenses].allow — add any non-standard licenses your dependencies use
+#    (e.g., "BUSL-1.1", "MPL-2.0", "LGPL-2.1", "LGPL-3.0")
+# 2. [sources].allow-git — add git repository URLs you depend on
+# 3. [bans].skip — add known-acceptable duplicate crate versions
+#
+# Run `cargo deny check` after customizing to verify configuration.
+# If a dependency fails the license check, either add its license to the
+# allow list or find an alternative crate.
+
+[advisories]
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+
+[licenses]
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "BSL-1.0",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "OpenSSL",
+    "CC0-1.0",
+]
+# Confidence threshold for license detection
+confidence-threshold = 0.8
+
+[bans]
+# Warn on duplicate crate versions
+multiple-versions = "warn"
+# Allow specific duplicates that are common in the ecosystem
+# skip = [
+#     { crate = "syn@1", reason = "many crates still depend on syn 1.x" },
+# ]
+
+[sources]
+# Allow crates from crates.io
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+# Allow git sources (add your project's git dependencies here)
+# Example:
+# allow-git = ["https://github.com/example/repo"]
+allow-git = []
+unknown-registry = "deny"
+unknown-git = "warn"

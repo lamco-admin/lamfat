@@ -1,0 +1,24 @@
+/target
+# doctest scratch (lib.rs doctests copy a fixture into tmp/)
+/tmp
+
+# editor / OS noise
+**/*.rs.bk
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*.orig
+
+# AI-agent and internal planning artifacts — never publish
+CLAUDE.md
+**/CLAUDE.md
+AGENTS.md
+**/AGENTS.md
+.claude/
+.cursor/
+*-checkpoint.md
+**/research-checkpoints/
+
+# NOTE: Cargo.lock is intentionally committed (libraries ship it since Cargo 1.84).

@@ -1,0 +1,13 @@
+lamfat — third-party attribution
+
+This crate is a faithful republish of:
+
+  fatfs (rafalh/rust-fatfs)
+  Upstream commit: c4b88477b22ca7e5131fbd8891f62a5deaa88e6e (the no_std 0.4.0 git line)
+  Copyright (c) 2017 Rafał Harabień
+  License: MIT
+
+lamfat keeps that MIT license. LICENSE-MIT carries both the upstream copyright
+(Rafał Harabień) and the Lamco Development LLC copyright for the republish-level
+changes. See PROVENANCE.md for the exact upstream commit and the full list of
+changes from upstream.
