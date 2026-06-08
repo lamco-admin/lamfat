@@ -12,7 +12,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  MSRV: "1.68"                       # matches Cargo.toml rust-version (fatfs's floor)
+  MSRV: "1.71"                       # matches Cargo.toml rust-version (env_logger 0.11 floor)
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

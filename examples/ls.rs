@@ -1,7 +1,6 @@
 use std::{env, fs::File, io};
 
 use chrono::NaiveDateTime;
-use fscommon::BufStream;
 use lamfat::{FileSystem, FsOptions};
 
 fn format_file_size(size: u64) -> String {
@@ -21,8 +20,7 @@ fn format_file_size(size: u64) -> String {
 
 fn main() -> io::Result<()> {
     let file = File::open("resources/fat32.img")?;
-    let buf_rdr = BufStream::new(file);
-    let fs = FileSystem::new(buf_rdr, FsOptions::new())?;
+    let fs = FileSystem::new(file, FsOptions::new())?;
     let root_dir = fs.root_dir();
     let dir = match env::args().nth(1) {
         None => root_dir,

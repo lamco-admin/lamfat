@@ -222,7 +222,7 @@ impl<IO: ReadWriteSeek, TP: TimeProvider, OCC> File<'_, IO, TP, OCC> {
         if let Some(ref mut e) = self.entry {
             let now = self.fs.options.time_provider.get_current_date_time();
             e.set_modified(now);
-            if e.inner().size().map_or(false, |s| offset > s) {
+            if e.inner().size().is_some_and(|s| offset > s) {
                 e.set_size(offset);
             }
         }

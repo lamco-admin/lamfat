@@ -20,8 +20,7 @@
 //!     // Initialize a filesystem object
 //!     let img_file = std::fs::OpenOptions::new().read(true).write(true)
 //!         .open("tmp/fat.img")?;
-//!     let buf_stream = fscommon::BufStream::new(img_file);
-//!     let fs = lamfat::FileSystem::new(buf_stream, lamfat::FsOptions::new())?;
+//!     let fs = lamfat::FileSystem::new(img_file, lamfat::FsOptions::new())?;
 //!     let root_dir = fs.root_dir();
 //!
 //!     // Write a file
