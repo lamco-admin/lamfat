@@ -3,7 +3,6 @@ use std::{
     io::{self, prelude::*},
 };
 
-use fscommon::BufStream;
 use lamfat::{FileSystem, FsOptions};
 
 fn main() -> io::Result<()> {
@@ -14,9 +13,8 @@ fn main() -> io::Result<()> {
             return Err(err);
         }
     };
-    let buf_stream = BufStream::new(img_file);
     let options = FsOptions::new().update_accessed_date(true);
-    let fs = FileSystem::new(buf_stream, options)?;
+    let fs = FileSystem::new(img_file, options)?;
     let mut file = fs.root_dir().create_file("hello.txt")?;
     file.write_all(b"Hello World!")?;
     Ok(())

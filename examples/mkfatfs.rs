@@ -1,6 +1,5 @@
 use std::{env, fs, io};
 
-use fscommon::BufStream;
 use lamfat::{format_volume, FormatVolumeOptions, StdIoWrapper};
 
 fn main() -> io::Result<()> {
@@ -9,9 +8,8 @@ fn main() -> io::Result<()> {
         .read(true)
         .write(true)
         .open(filename)?;
-    let buf_file = BufStream::new(file);
     format_volume(
-        &mut StdIoWrapper::from(buf_file),
+        &mut StdIoWrapper::from(file),
         FormatVolumeOptions::new(),
     )?;
     Ok(())

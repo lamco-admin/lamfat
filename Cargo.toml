@@ -11,7 +11,7 @@
 
 [package]
 name = "lamfat"
-version = "0.4.0"
+version = "0.4.1"
 authors = [
     "Rafał Harabień <rafalh92@outlook.com>",
     "Greg Lamberson <greg@lamco.io>",
@@ -59,9 +59,7 @@ log = { version = "0.4", default-features = false }
 chrono = { version = "0.4", default-features = false, features = ["clock"], optional = true }
 
 [dev-dependencies]
-# 0.10 drops the unmaintained `atty` (RUSTSEC) yet still resolves on the 1.68 MSRV.
-env_logger = "0.10"
-fscommon = "0.1"
+env_logger = "0.11"
 tempfile = "3.24.0"
 
 # The `ls` example prints timestamps, so it needs the (non-default) chrono feature.

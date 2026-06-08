@@ -1,6 +1,5 @@
 use std::{fs, io, io::prelude::*, mem, str};
 
-use fscommon::BufStream;
 use lamfat::{FsOptions, StdIoWrapper};
 
 const FAT12_IMG: &str = "fat12.img";
@@ -11,7 +10,7 @@ const TMP_DIR: &str = "tmp";
 const TEST_STR: &str = "Hi there Rust programmer!\n";
 const TEST_STR2: &str = "Rust is cool!\n";
 
-type FileSystem = lamfat::FileSystem<StdIoWrapper<BufStream<fs::File>>>;
+type FileSystem = lamfat::FileSystem<StdIoWrapper<fs::File>>;
 
 fn call_with_tmp_img<F: Fn(&str)>(f: F, filename: &str, test_seq: u32) {
     let _ = env_logger::builder().is_test(true).try_init();
@@ -29,9 +28,8 @@ fn open_filesystem_rw(tmp_path: &str) -> FileSystem {
         .write(true)
         .open(tmp_path)
         .unwrap();
-    let buf_file = BufStream::new(file);
     let options = FsOptions::new().update_accessed_date(true);
-    FileSystem::new(buf_file, options).unwrap()
+    FileSystem::new(file, options).unwrap()
 }
 
 fn call_with_fs<F: Fn(FileSystem)>(f: F, filename: &str, test_seq: u32) {

@@ -4,7 +4,6 @@ use std::{
     str,
 };
 
-use fscommon::BufStream;
 use lamfat::{FatType, FsOptions, StdIoWrapper};
 
 const TEST_TEXT: &str = "Rust is cool!\n";
@@ -12,13 +11,12 @@ const FAT12_IMG: &str = "resources/fat12.img";
 const FAT16_IMG: &str = "resources/fat16.img";
 const FAT32_IMG: &str = "resources/fat32.img";
 
-type FileSystem = lamfat::FileSystem<StdIoWrapper<BufStream<fs::File>>>;
+type FileSystem = lamfat::FileSystem<StdIoWrapper<fs::File>>;
 
 fn call_with_fs<F: Fn(FileSystem)>(f: F, filename: &str) {
     let _ = env_logger::builder().is_test(true).try_init();
     let file = fs::File::open(filename).unwrap();
-    let buf_file = BufStream::new(file);
-    let fs = FileSystem::new(buf_file, FsOptions::new()).unwrap();
+    let fs = FileSystem::new(file, FsOptions::new()).unwrap();
     f(fs);
 }
 
