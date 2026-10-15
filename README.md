@@ -4,6 +4,7 @@
 [![Docs.rs](https://docs.rs/lamfat/badge.svg)](https://docs.rs/lamfat)
 [![CI](https://github.com/lamco-admin/lamfat/actions/workflows/ci.yml/badge.svg)](https://github.com/lamco-admin/lamfat/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lamco-admin/lamfat/blob/main/LICENSE-MIT)
+[![Website](https://img.shields.io/badge/website-lamco.ai-blue.svg)](https://lamco.ai/products/lamboot/)
 
 A `no_std` FAT12/16/32 filesystem library — read and write — for embedded and
 UEFI-bootloader contexts that need to read a kernel (or write a config) on a FAT
@@ -12,6 +13,13 @@ volume without a userspace filesystem stack.
 Faithful republish of [rafalh/rust-fatfs](https://github.com/rafalh/rust-fatfs).
 See [`PROVENANCE.md`](https://github.com/lamco-admin/lamfat/blob/main/PROVENANCE.md)
 for the exact upstream commit and the full list of changes from upstream.
+
+- **Website:** [LamBoot](https://lamco.ai/products/lamboot/), the bootloader lamfat is published for
+- **Documentation:** [docs.rs/lamfat](https://docs.rs/lamfat) and the [LamBoot docs](https://lamco.ai/products/lamboot/docs/)
+- **Repository:** [github.com/lamco-admin/lamfat](https://github.com/lamco-admin/lamfat)
+- **Company:** [Lamco Development LLC](https://lamco.ai/)
+
+lamfat stays until upstream tags a `fatfs` 0.4.0 release on crates.io; LamBoot then moves to it.
 
 ## What it does
 
@@ -25,6 +33,12 @@ volume:
 It is the same battle-tested `fatfs` engine, repackaged under a distinct crate
 name so it can be a published dependency of the LamBoot bootloader family and
 packaged for Debian/Fedora. The on-disk format logic is unchanged from upstream.
+
+## Installation
+
+```sh
+cargo add lamfat
+```
 
 ## Usage sketch
 
@@ -62,6 +76,13 @@ default**, so the default dependency tree is just `bitflags` + `log`.
 
 Set `default-features = false` for `no_std` operation. `alloc` is required for
 long file names and formatting; the core read path works without it.
+
+## Contributing
+
+Issues and pull requests are welcome at
+[github.com/lamco-admin/lamfat](https://github.com/lamco-admin/lamfat). Changes
+that aren't specific to this republish belong upstream at
+[rafalh/rust-fatfs](https://github.com/rafalh/rust-fatfs).
 
 ## License
 

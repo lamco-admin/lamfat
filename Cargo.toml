@@ -11,7 +11,7 @@
 
 [package]
 name = "lamfat"
-version = "0.4.2"
+version = "0.4.3"
 authors = [
     "Rafał Harabień <rafalh92@outlook.com>",
     "Greg Lamberson <greg@lamco.io>",
@@ -25,7 +25,7 @@ readme = "README.md"
 keywords = ["fat", "filesystem", "no_std", "uefi", "bootloader"]
 categories = ["filesystem", "no-std"]
 license = "MIT"
-description = "no_std read/write FAT12/16/32 filesystem library (republish of fatfs)"
+description = "no_std read/write FAT12/16/32 filesystem library, a republish of rust-fatfs, from Lamco Development LLC"
 documentation = "https://docs.rs/lamfat"
 # Allowlist (not a denylist): only these ship in the crate. Test fixtures
 # (resources/, tests/) and dev scripts stay in git but never publish.

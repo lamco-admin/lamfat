@@ -388,7 +388,7 @@ impl<IO: Read + Write + Seek, TP, OCC> FileSystem<IO, TP, OCC> {
         // Make sure given image is not seeked
         let mut disk = storage.into_storage();
         trace!("FileSystem::new");
-        debug_assert!(disk.seek(SeekFrom::Current(0))? == 0);
+        debug_assert_eq!(disk.seek(SeekFrom::Current(0))?, 0);
 
         // read boot sector
         let bpb = {
@@ -1191,7 +1191,7 @@ pub fn format_volume<S: ReadWriteSeek>(
     options: FormatVolumeOptions,
 ) -> Result<(), Error<S::Error>> {
     trace!("format_volume");
-    debug_assert!(storage.seek(SeekFrom::Current(0))? == 0);
+    debug_assert_eq!(storage.seek(SeekFrom::Current(0))?, 0);
 
     let total_sectors = if let Some(total_sectors) = options.total_sectors {
         total_sectors
@@ -1256,7 +1256,7 @@ pub fn format_volume<S: ReadWriteSeek>(
             let mut fat_slice = fat_slice::<S, &mut S>(storage, bpb);
             alloc_cluster(&mut fat_slice, fat_type, None, None, 1)?
         };
-        assert!(root_dir_first_cluster == bpb.root_dir_first_cluster);
+        assert_eq!(root_dir_first_cluster, bpb.root_dir_first_cluster);
         let first_data_sector = reserved_sectors + sectors_per_all_fats + root_dir_sectors;
         let data_sectors_before_root_dir =
             bpb.sectors_from_clusters(root_dir_first_cluster - RESERVED_FAT_ENTRIES);

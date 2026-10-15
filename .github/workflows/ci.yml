@@ -9,6 +9,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Weekly, so new toolchain lints and RustSec advisories surface between pushes.
+  schedule:
+    - cron: "17 6 * * 1"
 
 env:
   CARGO_TERM_COLOR: always

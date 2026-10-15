@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.3] - 2026-10-15
+
+### Fixed
+
+- Five `assert!`/`debug_assert!` equality checks are written as `assert_eq!`
+  and `debug_assert_eq!`, which Rust 1.99's clippy (`manual_assert_eq`)
+  requires; CI failed on them. Behavior is unchanged.
+
+### Changed
+
+- The description names Lamco Development LLC, the README gains website,
+  documentation, install and contributing sections, and CI also runs weekly.
+
 ## [0.4.2] — 2026-06-08
 
 ### Changed
